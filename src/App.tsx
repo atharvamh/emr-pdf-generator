@@ -1,9 +1,10 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { generatePdf } from './lib/utils';
 import GeneralInput from './general-input';
 import { IChamberReadings, IOtherEchoFindings, IPatientInformation } from './interfaces/app-interfaces';
+import toast, { Toaster } from 'react-hot-toast';
 
 const App = () => {
   const genderOptions = [
@@ -53,10 +54,31 @@ const App = () => {
     collapse: "",
   })
 
+  const[doctorName, setDoctorName] = useState<string>("");
+  const [qualification, setQualification] = useState<string>("");
+
+  useEffect(() => {
+    const doctorDetails = localStorage.getItem("ecr-u-metadata");
+    if(!doctorDetails)
+      return;
+
+    const { name, qualification } = JSON.parse(doctorDetails);
+    setDoctorName(name);
+    setQualification(qualification);
+  },[]);
+
   const handleGenerate = (e : FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     generatePdf(patientDetails, chamberReadings, otherEchoReadings);
   };
+
+  const handleInput = (inputname: string, value: string) => {
+    if(inputname === "doctorName")
+      setDoctorName(value);
+
+    else if(inputname === "qualification")
+      setQualification(value);
+  }
 
   const handlePatientInfoInput = (inputname: string, value: string) => {
     setPatientDetails((prev) => {
@@ -87,12 +109,45 @@ const App = () => {
     );
   }
 
+  const saveDoctorDetails = () => {
+    if(!doctorName?.trim() || !qualification?.trim())
+      return;
+
+    const doctorDetails = {
+      name: doctorName,
+      qualification: qualification
+    }
+
+    localStorage.setItem("ecr-u-metadata", JSON.stringify(doctorDetails));
+    toast.success("Details saved successfully.");
+  }
+
   return (
     <div className='w-full flex flex-1 h-screen'>
+      <Toaster />
       <div className="p-6 bg-gray-800 text-white w-full h-screen overflow-y-auto mb-6">
         <form className='items-center flex flex-col flex-1 w-full h-screen flex-1 px-4 rounded-lg' 
           onSubmit={(e) => handleGenerate(e)}>
-
+          <div className='flex flex-col w-full'>
+            <GeneralInput 
+              type='text' id='doctorName' name='doctorName' label='Consulting Doctor Name' value={doctorName}
+              onChange={handleInput} required={true}
+            />
+          </div>
+          <div className='flex flex-col w-full'>
+            <GeneralInput 
+              type='text' id='qualification' name='qualification' label='Qualification (comma seperated)' value={qualification}
+              onChange={handleInput} required={true}
+            />
+          </div>
+          <button
+            type="button"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4"
+            onClick={saveDoctorDetails}
+          >
+            Save Details
+          </button>
+          <hr />
           <Disclosure defaultOpen={true}>
             {({ open }) => (
               <>

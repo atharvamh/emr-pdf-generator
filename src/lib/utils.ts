@@ -169,5 +169,5 @@ export const generatePdf = (patientDetails: IPatientInformation, chamberReadings
     "Trace MR, Trace TR, Trivial AR",
     6, 15
   );
-  pdfgen.previewPdf();
+  pdfgen._pdfContext.save(`${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report.pdf`);
 }
