@@ -310,7 +310,7 @@ const App = () => {
                       onChange={handleOtherEchoInput} required={false} />
                   </div>
                   <div className='w-full flex gap-2'>
-                    <GeneralInput type="number" id="ivc" name="ivc" label="IVC" value={otherEchoReadings.ivc}
+                    <GeneralInput type="text" id="ivc" name="ivc" label="IVC" value={otherEchoReadings.ivc}
                       onChange={handleOtherEchoInput} required={false} />
                   </div>
                 </Disclosure.Panel>
