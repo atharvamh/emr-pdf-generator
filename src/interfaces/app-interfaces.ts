@@ -1,3 +1,5 @@
+type StrNum = string | number;
+
 export interface IPatientInformation{
     salutation: string;
     name: string,
@@ -6,24 +8,48 @@ export interface IPatientInformation{
 }
 
 export interface IChamberReadings{
-    ao: number | string, 
-    la: number | string, 
-    lvidd: number | string, 
-    ivsd: number | string, 
-    pwd: number | string, 
-    ra: number | string, 
-    rv: number | string, 
+    ao: StrNum, 
+    la: StrNum, 
+    lvidd: StrNum,
+    lvids: StrNum,
+    ivsd: StrNum,
+    ivss: StrNum,
+    pwd: StrNum,
+    pws: StrNum,
+    ra: StrNum, 
+    rv: StrNum, 
     background? : string
 }
 
 export interface IOtherEchoFindings{
     iasreading: string, 
-    valves: string, 
-    valveDetails: string, 
+    valves: string,
+    clots: string,
+    clotDetails: string,
+    vegetation: string,
+    vegetationDetails: string,
+    periCardialEffusion: string,
+    periCardialEffusionDetails: string,
+    aorticArch: string,
+    aorticArchDetails: string,
     rwma: string, 
-    lvef: number | string, 
-    rvef: number | string, 
-    tapse: number | string, 
-    ivc: number | string, 
-    collapse: number | string
+    lvef: StrNum, 
+    rvef: StrNum, 
+    tapse: StrNum, 
+    ivc: string
+}
+
+export interface IDopplerFindings{
+    E: StrNum,
+    A: StrNum,
+    eDash: StrNum,
+    flowAcrossValves: string,
+    avMaxGradient: StrNum,
+    rvsp: StrNum,
+    rap: StrNum
+}
+
+export interface IDoctorDetails{
+    doctorName: string,
+    qualification: string,
 }

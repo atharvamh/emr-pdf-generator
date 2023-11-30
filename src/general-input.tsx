@@ -7,9 +7,10 @@ interface IProps{
     options?: Array<{label: string, value: string | number}>
     onChange: (name: string, value: string) => void;
     required?: boolean;
+    disabled?: boolean;
 }
 
-const GeneralInput = ({ label, type, id, name, value, options = [], onChange, required = false } : IProps) => {
+const GeneralInput = ({ label, type, id, name, value, options = [], onChange, required = false, disabled = false } : IProps) => {
   if (type === 'dropdown') {
     return (
       <div className="mb-4 w-full">
@@ -26,7 +27,9 @@ const GeneralInput = ({ label, type, id, name, value, options = [], onChange, re
           value={value}
           onChange={(e) => onChange(name, e.target.value)}
           required={required}
+          disabled={disabled}
         >
+          <option value="" disabled hidden>--</option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -53,6 +56,7 @@ const GeneralInput = ({ label, type, id, name, value, options = [], onChange, re
         value={value}
         onChange={(e) => onChange(name, e.currentTarget.value)}
         required={required}
+        disabled={disabled}
       />
     </div>
   );
