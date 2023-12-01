@@ -56,7 +56,6 @@ const App = () => {
     periCardialEffusion: "",
     periCardialEffusionDetails: "",
     aorticArch: "",
-    aorticArchDetails: "",
     rwma: "",
     lvef: "",
     rvef: "",
@@ -71,7 +70,8 @@ const App = () => {
     flowAcrossValves: "",
     avMaxGradient: "",
     rvsp: "",
-    rap: ""
+    rap: "",
+    moreDetails: ""
   })
 
   const [impressionsReport, setImpressionsReport] = useState<string>("");
@@ -97,7 +97,12 @@ const App = () => {
 
   const handleGenerate = (e : FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    generatePdf(patientDetails, chamberReadings, otherEchoReadings, dopplerFindings, { doctorName, qualification }, impressionsReport);
+    if(doctorName?.trim() && qualification?.trim()){
+      generatePdf(patientDetails, chamberReadings, otherEchoReadings, dopplerFindings, { doctorName, qualification }, impressionsReport);
+      return;
+    }
+      
+    toast.error("Please fill up profile information");
   };
 
   const handleInput = (inputname: string, value: string) => {
@@ -214,7 +219,7 @@ const App = () => {
   return (
     <div className='w-full flex flex-1 h-screen'>
       <Toaster />
-      <div className="p-6 bg-gray-800 text-white w-full h-screen overflow-y-auto mb-8">
+      <div className="p-6 bg-gray-800 text-white w-1/2 h-screen overflow-y-auto mb-8">
         <Tab.Group>
           <Tab.List className="flex flex-1 w-full px-2 gap-2">
             <Tab className={({ selected }) =>
@@ -344,13 +349,8 @@ const App = () => {
                               }
                             </div>
                             <div className='w-full flex flex-col gap-2 items-center'>
-                              <GeneralInput type="dropdown" id="aorticArch" name="aorticArch" label="Aortic Arch" 
-                                  value={otherEchoReadings.aorticArch} onChange={handleOtherEchoInput} required={false} options={yesNoOptions} />
-                              {
-                                otherEchoReadings.aorticArch === "Yes" &&
-                                <GeneralInput type="text" id="aorticArchDetails" name="aorticArchDetails" label="Aortic Arch Details" 
-                                value={otherEchoReadings.aorticArchDetails} onChange={handleOtherEchoInput} required={false} />
-                              }
+                              <GeneralInput type="text" id="aorticArch" name="aorticArch" label="Aortic Arch" 
+                                  value={otherEchoReadings.aorticArch} onChange={handleOtherEchoInput} required={false} />
                             </div>
                             <div className='w-full flex'>
                               <GeneralInput type="text" id="rwma" name="rwma" label="RWMA" value={otherEchoReadings.rwma}
@@ -402,6 +402,10 @@ const App = () => {
                                 value={dopplerFindings.rvsp} onChange={handleDopplerInput} required={false} />
                               <GeneralInput type="number" id="rap" name="rap" label="RAP (for PASP)" 
                                 value={dopplerFindings.rap} onChange={handleDopplerInput} required={false} />
+                            </div>
+                            <div className='w-full flex'>
+                              <GeneralInput type="text" id="moreDetails" name="moreDetails" label="Additional Details" 
+                                value={dopplerFindings.moreDetails} onChange={handleDopplerInput} required={false} />
                             </div>
                           </Disclosure.Panel>
                         </>
@@ -504,6 +508,9 @@ const App = () => {
               </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
+      </div>
+      <div className='w-1/2 h-full flex' id='pdf-preview'>
+
       </div>
     </div>
   );

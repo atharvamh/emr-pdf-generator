@@ -7,7 +7,7 @@ export function getLocalStorageUsage() {
     for (const key in localStorage) {
       if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
         const item = localStorage.getItem(key);
-        usedSpace += item?.length || 0;
+        usedSpace += item?.length ?? 0;
       }
     }
   

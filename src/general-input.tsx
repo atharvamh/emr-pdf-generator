@@ -24,7 +24,7 @@ const GeneralInput = ({ label, type, id, name, value, options = [], onChange, on
         <select
           id={id}
           name={name}
-          className="mt-1 p-2 border rounded-md text-gray-800 w-full"
+          className="mt-1 p-2 border rounded-md text-sm text-gray-800 w-full"
           value={value}
           onChange={(e) => onChange(name, e.target.value)}
           required={required}
@@ -56,7 +56,7 @@ const GeneralInput = ({ label, type, id, name, value, options = [], onChange, on
           className="mt-1 p-2 border rounded-md text-gray-800 text-sm w-full"
           value={value}
           onChange={(e) => onTxtAreaChange?.(e.currentTarget.value)}
-          style={{ minHeight: "18rem" }}
+          style={{ minHeight: "14rem" }}
           required={required}
           disabled={disabled}
         />
@@ -76,7 +76,7 @@ const GeneralInput = ({ label, type, id, name, value, options = [], onChange, on
         type={type}
         id={id}
         name={name}
-        className="mt-1 p-2 border rounded-md text-gray-800 w-full"
+        className="mt-1 p-2 border rounded-md text-gray-800 text-sm w-full"
         value={value}
         onChange={(e) => onChange(name, e.currentTarget.value)}
         required={required}

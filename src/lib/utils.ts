@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import jsPDF from "jspdf";
-import { IChamberReadings, IDoctorDetails, IDopplerFindings, IOtherEchoFindings, IPatientInformation } from "../interfaces/app-interfaces";
-
-type StrNum = string | number;
+import { IChamberReadings, IDoctorDetails, IDopplerFindings, IOtherEchoFindings, IPatientInformation, StrNum } from "../interfaces/app-interfaces";
 
 const pdfTitle = "2D Echocardiography & Colour Doppler Report";
 const pdfFontName = "helvetica";
 const defaultBlankValue = "__";
+const titleFontSize = 14;
+const sectionHeadingFontSize = 12;
+const textFontSize = 10;
 
 function capitalizeWords(input: string) {
   return input.replace(/\b\w/g, match => match.toUpperCase());
@@ -27,10 +28,9 @@ class PdfGenerator{
   }
 
   setTitle = (title: string) => {
-    const fontSize = 14;
     this._pdfContext.setFont(pdfFontName, "bold");
-    this._pdfContext.setFontSize(fontSize);
-    const textWidth = this._pdfContext.getStringUnitWidth(title) * fontSize;
+    this._pdfContext.setFontSize(titleFontSize);
+    const textWidth = this._pdfContext.getStringUnitWidth(title) * titleFontSize;
     const textX = Math.max(((this.pageWidth - textWidth) / 2) + this.margin, this.margin);
 
     this._pdfContext.text(title, textX, this.margin);
@@ -63,15 +63,15 @@ class PdfGenerator{
     const sectionOffset = 2;
 
     this._pdfContext.setFont(pdfFontName, "bold");
-    this._pdfContext.setFontSize(12);
+    this._pdfContext.setFontSize(sectionHeadingFontSize);
     this._pdfContext.text(`Background : ${background ?? "--"}`, this.margin, this.usedSpaceFromTop + sectionOffset);
 
-    this.usedSpaceFromTop += (sectionOffset * 4);
+    this.usedSpaceFromTop += (sectionOffset * 3);
 
     this._pdfContext.text("2D Echo findings", this.margin, this.usedSpaceFromTop + sectionOffset);
     this.usedSpaceFromTop += (sectionOffset * 3);
 
-    this._pdfContext.setFontSize(10);
+    this._pdfContext.setFontSize(textFontSize);
     this._pdfContext.setFont(pdfFontName, "normal");
     this._pdfContext.text("Chambers size:", this.margin, this.usedSpaceFromTop + sectionOffset);
 
@@ -99,7 +99,7 @@ class PdfGenerator{
 
   setOtherReadings = (iasreading: string, valves: string, clots: string, clotDetails: string,
     vegetation: string, vegetationDetails: string, periCardialEffusion: string, periCardialEffusionDetails: string,
-    aorticArch: string, aorticArchDetails: string, rwma: string, lvef: StrNum, rvef: StrNum, tapse: StrNum, ivc: StrNum) => {
+    aorticArch: string, rwma: string, lvef: StrNum, rvef: StrNum, tapse: StrNum, ivc: StrNum) => {
     const sectionOffset = 2;
 
     this._pdfContext.text(`IAS/IVS: ${iasreading}`, this.margin, this.usedSpaceFromTop + sectionOffset);
@@ -135,11 +135,6 @@ class PdfGenerator{
 
     this._pdfContext.text(`Aortic Arch: ${aorticArch}`, this.margin, this.usedSpaceFromTop + sectionOffset);
 
-    if(aorticArch === "Yes"){
-      this.usedSpaceFromTop += (sectionOffset * 3);
-      this._pdfContext.text(`Details : ${aorticArchDetails}`, this.margin, this.usedSpaceFromTop + sectionOffset)
-    }
-
     this.usedSpaceFromTop += (sectionOffset * 3);
     this._pdfContext.line(this.margin, this.usedSpaceFromTop, this.margin + this.pageWidth, this.usedSpaceFromTop);
 
@@ -162,16 +157,17 @@ class PdfGenerator{
     this.usedSpaceFromTop += (sectionOffset * 2);
   }
 
-  setDopplerFindings = (E: StrNum, A: StrNum, eDash: StrNum, flowAcrossValves: string, avMaxGradient: StrNum, rvsp: StrNum, rap: StrNum) => {
+  setDopplerFindings = (E: StrNum, A: StrNum, eDash: StrNum, flowAcrossValves: string, avMaxGradient: StrNum, 
+    rvsp: StrNum, rap: StrNum, additionalDetails: string) => {
     const sectionOffset = 2;
     this._pdfContext.setFont(pdfFontName, "bold");
-    this._pdfContext.setFontSize(12);
+    this._pdfContext.setFontSize(sectionHeadingFontSize);
 
     this._pdfContext.text("Doppler Findings", this.margin, this.usedSpaceFromTop + sectionOffset);
     this.usedSpaceFromTop += (sectionOffset * 3);
 
     this._pdfContext.setFont(pdfFontName, "normal");
-    this._pdfContext.setFontSize(10);
+    this._pdfContext.setFontSize(textFontSize);
 
     const numE = Number(E);
     const numA = Number(A);
@@ -190,6 +186,11 @@ class PdfGenerator{
 
     this._pdfContext.text(`PASP = ${rvsp || "0"} + ${rap || "0"} = ${Number(rvsp) + Number(rap)} mm of Hg`, this.margin, this.usedSpaceFromTop + sectionOffset);
 
+    if(additionalDetails){
+      this.usedSpaceFromTop += (sectionOffset * 3);
+      this._pdfContext.text(`Details : ${additionalDetails}`, this.margin, this.usedSpaceFromTop + sectionOffset);
+    }
+
     this.usedSpaceFromTop += (sectionOffset * 3);
     this._pdfContext.line(this.margin, this.usedSpaceFromTop, this.margin + this.pageWidth, this.usedSpaceFromTop);
 
@@ -199,29 +200,30 @@ class PdfGenerator{
   setImpressions = (impressions: string) => {
     const sectionOffset = 2;
     this._pdfContext.setFont(pdfFontName, "bold");
-    this._pdfContext.setFontSize(12);
+    this._pdfContext.setFontSize(sectionHeadingFontSize);
 
     this._pdfContext.text("IMPRESSION", this.margin, this.usedSpaceFromTop + sectionOffset);
     this.usedSpaceFromTop += (sectionOffset * 2);
-    this._pdfContext.rect(this.margin, this.usedSpaceFromTop, this.pageWidth, this.pageHeight - this.usedSpaceFromTop + sectionOffset * 4);
+    this._pdfContext.rect(this.margin, this.usedSpaceFromTop, this.pageWidth, this.pageHeight - this.usedSpaceFromTop + (sectionOffset * 2));
 
-    this._pdfContext.setFontSize(10);
+    this._pdfContext.setFontSize(8);
     const impArr = impressions.split(",");
 
     this.usedSpaceFromTop += (sectionOffset * 2);
-    for(let i = 0; i < impArr.length; i++){
-      this._pdfContext.text(`${impArr[i].trim().toUpperCase()}`, this.margin + sectionOffset, this.usedSpaceFromTop + sectionOffset);
-      this.usedSpaceFromTop += (sectionOffset * 3);
+
+    for(const element of impArr){
+      this._pdfContext.text(`${element.trim().toUpperCase()}`, this.margin + sectionOffset, this.usedSpaceFromTop + sectionOffset);
+      this.usedSpaceFromTop += (sectionOffset * 2.5);
     }
   }
 
   setDoctorSignature = (name: string, qualification: string) => {
     this._pdfContext.setFont(pdfFontName, "bold");
-    this._pdfContext.setFontSize(12);
+    this._pdfContext.setFontSize(sectionHeadingFontSize);
     this._pdfContext.text(`Dr. ${capitalizeWords(name)}`, this.margin, this.pageHeight + this.margin);
 
     this._pdfContext.setFont(pdfFontName, "normal");
-    this._pdfContext.setFontSize(10);
+    this._pdfContext.setFontSize(textFontSize);
     this._pdfContext.text(qualification, this.margin, this.pageHeight + this.margin + 5);
   }
 
@@ -237,6 +239,12 @@ class PdfGenerator{
       pdfPreviewSection.innerHTML = "";
       pdfPreviewSection.appendChild(iframe);
     }
+  }
+
+  savePdf = (patientDetails: IPatientInformation) => {
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getDate().toString().padStart(2,'0')}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+    this._pdfContext.save(`${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report_${formattedDate}.pdf`);
   }
 }
 
@@ -260,7 +268,6 @@ export const generatePdf = (patientDetails: IPatientInformation, chamberReadings
     otherEchoReadings.periCardialEffusion,
     otherEchoReadings.periCardialEffusionDetails,
     otherEchoReadings.aorticArch,
-    otherEchoReadings.aorticArchDetails,
     otherEchoReadings.rwma,
     otherEchoReadings.lvef,
     otherEchoReadings.rvef,
@@ -274,12 +281,11 @@ export const generatePdf = (patientDetails: IPatientInformation, chamberReadings
     dopplerFindings.flowAcrossValves,
     dopplerFindings.avMaxGradient,
     dopplerFindings.rvsp,
-    dopplerFindings.rap
+    dopplerFindings.rap,
+    dopplerFindings.moreDetails
   );
   pdfgen.setImpressions(impressions);
   pdfgen.setDoctorSignature(doctorDetails.doctorName, doctorDetails.qualification);
-
-  const currentDate = new Date();
-  const formattedDate = `${currentDate.getDate().toString().padStart(2,'0')}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
-  pdfgen._pdfContext.save(`${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report_${formattedDate}.pdf`);
+  pdfgen.previewPdf();
+  //pdfgen.savePdf(patientDetails);
 }

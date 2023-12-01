@@ -1,4 +1,4 @@
-type StrNum = string | number;
+export type StrNum = string | number;
 
 export interface IPatientInformation{
     salutation: string;
@@ -31,7 +31,6 @@ export interface IOtherEchoFindings{
     periCardialEffusion: string,
     periCardialEffusionDetails: string,
     aorticArch: string,
-    aorticArchDetails: string,
     rwma: string, 
     lvef: StrNum, 
     rvef: StrNum, 
@@ -46,7 +45,8 @@ export interface IDopplerFindings{
     flowAcrossValves: string,
     avMaxGradient: StrNum,
     rvsp: StrNum,
-    rap: StrNum
+    rap: StrNum,
+    moreDetails: string
 }
 
 export interface IDoctorDetails{
