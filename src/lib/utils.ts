@@ -286,6 +286,5 @@ export const generatePdf = (patientDetails: IPatientInformation, chamberReadings
   );
   pdfgen.setImpressions(impressions);
   pdfgen.setDoctorSignature(doctorDetails.doctorName, doctorDetails.qualification);
-  pdfgen.previewPdf();
-  //pdfgen.savePdf(patientDetails);
+  pdfgen.savePdf(patientDetails);
 }

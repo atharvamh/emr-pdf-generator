@@ -219,7 +219,7 @@ const App = () => {
   return (
     <div className='w-full flex flex-1 h-screen'>
       <Toaster />
-      <div className="p-6 bg-gray-800 text-white w-1/2 h-screen overflow-y-auto mb-8">
+      <div className="p-6 bg-gray-800 text-white w-full h-screen overflow-y-auto mb-8">
         <Tab.Group>
           <Tab.List className="flex flex-1 w-full px-2 gap-2">
             <Tab className={({ selected }) =>
@@ -508,9 +508,6 @@ const App = () => {
               </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
-      </div>
-      <div className='w-1/2 h-full flex' id='pdf-preview'>
-
       </div>
     </div>
   );
