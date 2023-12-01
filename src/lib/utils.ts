@@ -159,7 +159,7 @@ class PdfGenerator{
     this.usedSpaceFromTop += (sectionOffset * 3);
     this._pdfContext.line(this.margin, this.usedSpaceFromTop, this.margin + this.pageWidth, this.usedSpaceFromTop);
 
-    this.usedSpaceFromTop += (sectionOffset * 3);
+    this.usedSpaceFromTop += (sectionOffset * 2);
   }
 
   setDopplerFindings = (E: StrNum, A: StrNum, eDash: StrNum, flowAcrossValves: string, avMaxGradient: StrNum, rvsp: StrNum, rap: StrNum) => {
@@ -189,6 +189,30 @@ class PdfGenerator{
     this.usedSpaceFromTop += (sectionOffset * 3);
 
     this._pdfContext.text(`PASP = ${rvsp || "0"} + ${rap || "0"} = ${Number(rvsp) + Number(rap)} mm of Hg`, this.margin, this.usedSpaceFromTop + sectionOffset);
+
+    this.usedSpaceFromTop += (sectionOffset * 3);
+    this._pdfContext.line(this.margin, this.usedSpaceFromTop, this.margin + this.pageWidth, this.usedSpaceFromTop);
+
+    this.usedSpaceFromTop += (sectionOffset * 2);
+  }
+
+  setImpressions = (impressions: string) => {
+    const sectionOffset = 2;
+    this._pdfContext.setFont(pdfFontName, "bold");
+    this._pdfContext.setFontSize(12);
+
+    this._pdfContext.text("IMPRESSION", this.margin, this.usedSpaceFromTop + sectionOffset);
+    this.usedSpaceFromTop += (sectionOffset * 2);
+    this._pdfContext.rect(this.margin, this.usedSpaceFromTop, this.pageWidth, this.pageHeight - this.usedSpaceFromTop + sectionOffset * 4);
+
+    this._pdfContext.setFontSize(10);
+    const impArr = impressions.split(",");
+
+    this.usedSpaceFromTop += (sectionOffset * 2);
+    for(let i = 0; i < impArr.length; i++){
+      this._pdfContext.text(`${impArr[i].trim().toUpperCase()}`, this.margin + sectionOffset, this.usedSpaceFromTop + sectionOffset);
+      this.usedSpaceFromTop += (sectionOffset * 3);
+    }
   }
 
   setDoctorSignature = (name: string, qualification: string) => {
@@ -217,7 +241,7 @@ class PdfGenerator{
 }
 
 export const generatePdf = (patientDetails: IPatientInformation, chamberReadings: IChamberReadings,
-  otherEchoReadings: IOtherEchoFindings, dopplerFindings: IDopplerFindings, doctorDetails: IDoctorDetails) => {
+  otherEchoReadings: IOtherEchoFindings, dopplerFindings: IDopplerFindings, doctorDetails: IDoctorDetails, impressions: string) => {
   const pdfgen = new PdfGenerator();
   pdfgen.setTitle(pdfTitle);
   pdfgen.setPatientInfoSection(patientDetails.salutation + " " + patientDetails.name, patientDetails.age, patientDetails.gender);
@@ -252,6 +276,8 @@ export const generatePdf = (patientDetails: IPatientInformation, chamberReadings
     dopplerFindings.rvsp,
     dopplerFindings.rap
   );
+  pdfgen.setImpressions(impressions);
   pdfgen.setDoctorSignature(doctorDetails.doctorName, doctorDetails.qualification);
-  pdfgen._pdfContext.save(`${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report.pdf`);
+  pdfgen.previewPdf();
+  //pdfgen._pdfContext.save(`${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report.pdf`);
 }

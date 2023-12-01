@@ -53,3 +53,9 @@ export interface IDoctorDetails{
     doctorName: string,
     qualification: string,
 }
+
+export interface IImpressionTemplate{
+    id: string,
+    name: string,
+    value: string
+}

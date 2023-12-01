@@ -40,6 +40,29 @@ const GeneralInput = ({ label, type, id, name, value, options = [], onChange, re
     );
   }
 
+  else if(type === 'textarea') {
+    return (
+      <div className="mb-4 w-full">
+        <label htmlFor={id} className="block text-sm font-medium">
+          <span>{label}</span>
+          {
+            required ? <span className="text-red-500"> *</span> : <></>
+          }
+        </label>
+        <textarea
+          id={id}
+          name={name}
+          className="mt-1 p-2 border rounded-md text-gray-800 text-sm w-full"
+          value={value}
+          onChange={(e) => onChange(name, e.currentTarget.value)}
+          style={{ minHeight: "18rem" }}
+          required={required}
+          disabled={disabled}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="mb-4 w-full">
       <label htmlFor={id} className="block text-sm font-medium">
