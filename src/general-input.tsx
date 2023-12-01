@@ -6,11 +6,12 @@ interface IProps{
     value: string | number | undefined;
     options?: Array<{label: string, value: string | number}>
     onChange: (name: string, value: string) => void;
+    onTxtAreaChange?: (value: string) => void;
     required?: boolean;
     disabled?: boolean;
 }
 
-const GeneralInput = ({ label, type, id, name, value, options = [], onChange, required = false, disabled = false } : IProps) => {
+const GeneralInput = ({ label, type, id, name, value, options = [], onChange, onTxtAreaChange, required = false, disabled = false } : IProps) => {
   if (type === 'dropdown') {
     return (
       <div className="mb-4 w-full">
@@ -54,7 +55,7 @@ const GeneralInput = ({ label, type, id, name, value, options = [], onChange, re
           name={name}
           className="mt-1 p-2 border rounded-md text-gray-800 text-sm w-full"
           value={value}
-          onChange={(e) => onChange(name, e.currentTarget.value)}
+          onChange={(e) => onTxtAreaChange?.(e.currentTarget.value)}
           style={{ minHeight: "18rem" }}
           required={required}
           disabled={disabled}

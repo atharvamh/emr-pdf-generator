@@ -148,7 +148,7 @@ const App = () => {
     );
   }
 
-  const handleImpressionsInput = (inputname: string, value: string) => {
+  const handleImpressionsInput = (value: string) => {
     setImpressionsReport(value);
   }
 
@@ -214,7 +214,7 @@ const App = () => {
   return (
     <div className='w-full flex flex-1 h-screen'>
       <Toaster />
-      <div className="p-6 bg-gray-800 text-white w-1/2 h-screen overflow-y-auto mb-8">
+      <div className="p-6 bg-gray-800 text-white w-full h-screen overflow-y-auto mb-8">
         <Tab.Group>
           <Tab.List className="flex flex-1 w-full px-2 gap-2">
             <Tab className={({ selected }) =>
@@ -417,7 +417,8 @@ const App = () => {
                           </Disclosure.Button>
                           <Disclosure.Panel className="p-4 border border-t-0 rounded-md w-full">
                             <GeneralInput type="textarea" id="impressionsReport" name="impressionsReport" label="Details (comma seperated)" 
-                                value={impressionsReport} onChange={handleImpressionsInput} required={false} />
+                                value={impressionsReport} onChange={() => null}
+                                onTxtAreaChange={handleImpressionsInput} required={false} />
                             <div className='flex items-center justify-center'>
                               <button
                                 type="button"

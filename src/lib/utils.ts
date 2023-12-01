@@ -278,6 +278,8 @@ export const generatePdf = (patientDetails: IPatientInformation, chamberReadings
   );
   pdfgen.setImpressions(impressions);
   pdfgen.setDoctorSignature(doctorDetails.doctorName, doctorDetails.qualification);
-  pdfgen.previewPdf();
-  //pdfgen._pdfContext.save(`${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report.pdf`);
+
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getDate().toString().padStart(2,'0')}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+  pdfgen._pdfContext.save(`${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report_${formattedDate}.pdf`);
 }
