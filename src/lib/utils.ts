@@ -173,10 +173,13 @@ class PdfGenerator{
     this._pdfContext.setFont(pdfFontName, "normal");
     this._pdfContext.setFontSize(10);
 
+    const numE = Number(E);
+    const numA = Number(A);
+    const numeDash = Number(eDash);
     const equiPartWidth = this.pageWidth / 3;
-    this._pdfContext.text(`E : ${E || defaultBlankValue} cm/sec`, this.margin, this.usedSpaceFromTop + sectionOffset);
-    this._pdfContext.text(`A : ${A || defaultBlankValue} cm/sec`, this.margin + equiPartWidth, this.usedSpaceFromTop + sectionOffset);
-    this._pdfContext.text(`e' : ${eDash || defaultBlankValue} cm/sec`, this.margin + (2 * equiPartWidth), this.usedSpaceFromTop + sectionOffset);
+    this._pdfContext.text(`${numE > numA ? "E > A" : (numE < numA ? "E < A" : "E = A")}`, this.margin, this.usedSpaceFromTop + sectionOffset);
+    this._pdfContext.text(`E / A : ${numA !== 0 ? (numE / numA).toFixed(2) : defaultBlankValue}`, this.margin + equiPartWidth, this.usedSpaceFromTop + sectionOffset);
+    this._pdfContext.text(`E / e' : ${numeDash !== 0 ? (numE / numeDash).toFixed(2) : defaultBlankValue}`, this.margin + (2 * equiPartWidth), this.usedSpaceFromTop + sectionOffset);
     this.usedSpaceFromTop += (sectionOffset * 3);
 
     this._pdfContext.text(`Flow across valves : ${flowAcrossValves}`, this.margin, this.usedSpaceFromTop + sectionOffset);
