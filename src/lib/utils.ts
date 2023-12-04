@@ -25,6 +25,7 @@ class PdfGenerator{
     this._pdfContext = new jsPDF();
     this.pageWidth = this._pdfContext.internal.pageSize.width - (2 * this.margin);
     this.pageHeight = this._pdfContext.internal.pageSize.height - (2 * this.margin);
+    this.usedSpaceFromTop = 32;
   }
 
   setTitle = (title: string) => {
@@ -33,29 +34,29 @@ class PdfGenerator{
     const textWidth = this._pdfContext.getStringUnitWidth(title) * titleFontSize;
     const textX = Math.max(((this.pageWidth - textWidth) / 2) + this.margin, this.margin);
 
-    this._pdfContext.text(title, textX, this.margin);
+    this._pdfContext.text(title, textX, this.usedSpaceFromTop);
   }
 
   setPatientInfoSection = (name: string, age?: number, sex?: string) => {
-    const infoSectionHeight = 12;
+    const infoSectionHeight = 10;
     const titleOffset = 4;
     const fontSize = 10;
     this._pdfContext.setFont(pdfFontName, "normal");
     this._pdfContext.setFontSize(fontSize);
 
-    this._pdfContext.line(this.margin, this.margin + titleOffset, this.margin + this.pageWidth, this.margin + titleOffset);
-    this._pdfContext.line(this.margin, this.margin + infoSectionHeight, this.margin + this.pageWidth, this.margin + infoSectionHeight);
+    this._pdfContext.line(this.margin, this.usedSpaceFromTop + titleOffset, this.margin + this.pageWidth, this.usedSpaceFromTop + titleOffset);
+    this._pdfContext.line(this.margin, this.usedSpaceFromTop + infoSectionHeight, this.margin + this.pageWidth, this.usedSpaceFromTop + infoSectionHeight);
 
     const nameSectionWidth = this.pageWidth / 2;
     const equiPartWidth = nameSectionWidth / 3;
-    const posY = this.margin + titleOffset + (infoSectionHeight / 2.5);
+    const posY = this.usedSpaceFromTop + titleOffset + (infoSectionHeight / 2.5);
 
     this._pdfContext.text(`Name: ${name}`, this.margin, posY);
     this._pdfContext.text(`Age: ${age ?? "--"}`, this.margin + nameSectionWidth, posY);
     this._pdfContext.text(`Sex: ${sex ?? "--"}`, this.margin + nameSectionWidth + equiPartWidth, posY);
     this._pdfContext.text(`Date: ${new Date().toLocaleDateString('en-UK') }`, this.margin + nameSectionWidth + 2 * equiPartWidth, posY);
 
-    this.usedSpaceFromTop = this.margin + infoSectionHeight + titleOffset;
+    this.usedSpaceFromTop += infoSectionHeight + titleOffset;
   }
 
   setChamberReadings = (ao: StrNum, la: StrNum, lvidd: StrNum, lvids: StrNum, 
@@ -200,31 +201,32 @@ class PdfGenerator{
   setImpressions = (impressions: string) => {
     const sectionOffset = 2;
     this._pdfContext.setFont(pdfFontName, "bold");
-    this._pdfContext.setFontSize(sectionHeadingFontSize);
+    this._pdfContext.setFontSize(16);
 
     this._pdfContext.text("IMPRESSION", this.margin, this.usedSpaceFromTop + sectionOffset);
     this.usedSpaceFromTop += (sectionOffset * 2);
-    this._pdfContext.rect(this.margin, this.usedSpaceFromTop, this.pageWidth, this.pageHeight - this.usedSpaceFromTop + (sectionOffset * 2));
+    this._pdfContext.rect(this.margin, this.usedSpaceFromTop, this.pageWidth, this.pageHeight * 0.25);
 
     this._pdfContext.setFontSize(8);
     const impArr = impressions.split(",");
 
-    this.usedSpaceFromTop += (sectionOffset * 2);
+    this.usedSpaceFromTop += (sectionOffset * 1);
 
     for(const element of impArr){
       this._pdfContext.text(`${element.trim().toUpperCase()}`, this.margin + sectionOffset, this.usedSpaceFromTop + sectionOffset);
-      this.usedSpaceFromTop += (sectionOffset * 2.5);
+      this.usedSpaceFromTop += (sectionOffset * 2);
     }
   }
 
   setDoctorSignature = (name: string, qualification: string) => {
+    const sectionOffset = 6;
     this._pdfContext.setFont(pdfFontName, "bold");
     this._pdfContext.setFontSize(sectionHeadingFontSize);
-    this._pdfContext.text(`Dr. ${capitalizeWords(name)}`, this.margin, this.pageHeight + this.margin);
+    this._pdfContext.text(`Dr. ${capitalizeWords(name)}`, this.margin, this.pageHeight + sectionOffset);
 
     this._pdfContext.setFont(pdfFontName, "normal");
     this._pdfContext.setFontSize(textFontSize);
-    this._pdfContext.text(qualification, this.margin, this.pageHeight + this.margin + 5);
+    this._pdfContext.text(qualification, this.margin, this.pageHeight + (sectionOffset * 1.8));
   }
 
   previewPdf = () => {
