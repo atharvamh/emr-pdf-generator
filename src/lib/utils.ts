@@ -207,10 +207,10 @@ class PdfGenerator{
     this.usedSpaceFromTop += (sectionOffset * 2);
     this._pdfContext.rect(this.margin, this.usedSpaceFromTop, this.pageWidth, this.pageHeight * 0.19);
 
-    this._pdfContext.setFontSize(10);
+    this._pdfContext.setFontSize(12);
     const impArr = impressions.split(",");
 
-    this.usedSpaceFromTop += (sectionOffset * 1);
+    this.usedSpaceFromTop += (sectionOffset * 2);
 
     for(const element of impArr){
       this._pdfContext.text(`${element.trim().toUpperCase()}`, this.margin + sectionOffset, this.usedSpaceFromTop + sectionOffset);
