@@ -443,7 +443,9 @@ const App = () => {
                                     return (
                                       <div className='flex flex-col gap-2 items-start pb-4' key={template.id}>
                                         <div className='flex w-full items-center justify-between pr-2'>
-                                          <p className='text-xs'>{template.name}</p>
+                                          <p className='text-xs flex gap-2 items-center'>
+                                            <span>{template.name}</span>
+                                          </p>
                                           <p className='text-sm cursor-pointer' onClick={() => deleteImpressionTemplate(template.id)}>
                                             <FiTrash2 />
                                           </p>

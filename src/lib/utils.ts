@@ -25,7 +25,7 @@ class PdfGenerator{
     this._pdfContext = new jsPDF();
     this.pageWidth = this._pdfContext.internal.pageSize.width - (2 * this.margin);
     this.pageHeight = this._pdfContext.internal.pageSize.height - (2 * this.margin);
-    this.usedSpaceFromTop = 32;
+    this.usedSpaceFromTop = 36;
   }
 
   setTitle = (title: string) => {
@@ -110,7 +110,7 @@ class PdfGenerator{
 
     this._pdfContext.text(`Clots: ${clots}`, this.margin, this.usedSpaceFromTop + sectionOffset);
 
-    if(clots === "Yes"){
+    if(clots === "Yes" && clotDetails?.trim().length > 0){
       this.usedSpaceFromTop += (sectionOffset * 3);
       this._pdfContext.text(`Details : ${clotDetails}`, this.margin, this.usedSpaceFromTop + sectionOffset)
     }
@@ -118,7 +118,7 @@ class PdfGenerator{
     this.usedSpaceFromTop += (sectionOffset * 3);
     this._pdfContext.text(`Vegetation: ${vegetation}`, this.margin, this.usedSpaceFromTop + sectionOffset);
 
-    if(vegetation === "Yes"){
+    if(vegetation === "Yes" && vegetationDetails?.trim().length > 0){
       this.usedSpaceFromTop += (sectionOffset * 3);
       this._pdfContext.text(`Details : ${vegetationDetails}`, this.margin, this.usedSpaceFromTop + sectionOffset)
     }
@@ -127,7 +127,7 @@ class PdfGenerator{
 
     this._pdfContext.text(`Pericardial Effusion: ${periCardialEffusion}`, this.margin, this.usedSpaceFromTop + sectionOffset);
 
-    if(periCardialEffusion === "Yes"){
+    if(periCardialEffusion === "Yes" && periCardialEffusionDetails?.trim().length > 0){
       this.usedSpaceFromTop += (sectionOffset * 3);
       this._pdfContext.text(`Details : ${periCardialEffusionDetails}`, this.margin, this.usedSpaceFromTop + sectionOffset)
     }
@@ -201,32 +201,32 @@ class PdfGenerator{
   setImpressions = (impressions: string) => {
     const sectionOffset = 2;
     this._pdfContext.setFont(pdfFontName, "bold");
-    this._pdfContext.setFontSize(16);
+    this._pdfContext.setFontSize(titleFontSize);
 
     this._pdfContext.text("IMPRESSION", this.margin, this.usedSpaceFromTop + sectionOffset);
     this.usedSpaceFromTop += (sectionOffset * 2);
-    this._pdfContext.rect(this.margin, this.usedSpaceFromTop, this.pageWidth, this.pageHeight * 0.25);
+    this._pdfContext.rect(this.margin, this.usedSpaceFromTop, this.pageWidth, this.pageHeight * 0.19);
 
-    this._pdfContext.setFontSize(8);
+    this._pdfContext.setFontSize(10);
     const impArr = impressions.split(",");
 
     this.usedSpaceFromTop += (sectionOffset * 1);
 
     for(const element of impArr){
       this._pdfContext.text(`${element.trim().toUpperCase()}`, this.margin + sectionOffset, this.usedSpaceFromTop + sectionOffset);
-      this.usedSpaceFromTop += (sectionOffset * 2);
+      this.usedSpaceFromTop += (sectionOffset * 2.2);
     }
   }
 
   setDoctorSignature = (name: string, qualification: string) => {
-    const sectionOffset = 6;
+    const sectionOffset = 5;
     this._pdfContext.setFont(pdfFontName, "bold");
     this._pdfContext.setFontSize(sectionHeadingFontSize);
-    this._pdfContext.text(`Dr. ${capitalizeWords(name)}`, this.margin, this.pageHeight + sectionOffset);
+    this._pdfContext.text(`Dr. ${capitalizeWords(name)}`, this.margin, this.pageHeight);
 
     this._pdfContext.setFont(pdfFontName, "normal");
     this._pdfContext.setFontSize(textFontSize);
-    this._pdfContext.text(qualification, this.margin, this.pageHeight + (sectionOffset * 1.8));
+    this._pdfContext.text(qualification, this.margin, this.pageHeight + sectionOffset);
   }
 
   previewPdf = () => {
