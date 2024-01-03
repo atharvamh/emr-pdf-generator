@@ -510,11 +510,11 @@ const App = () => {
                 }
               </Tab.Panel>
           </Tab.Panels>
+          <footer className='w-full absolute bottom-0 right-0 text-center p-2 bg-gray-800'>
+            <p className='text-sm'>&copy; { new Date().getFullYear() }. MediGen Solutions. All Rights Reserved.</p>
+            <p className='text-xs'>Version - {packageJson.version}</p>
+          </footer>
         </Tab.Group>
-        <footer className='w-full absolute bottom-0 right-0 text-center p-2 bg-gray-800'>
-          <p className='text-sm'>&copy; { new Date().getFullYear() }. MediGen Solutions. All Rights Reserved.</p>
-          <p className='text-xs'>Version - {packageJson.version}</p>
-        </footer>
       </div>
     </div>
   );
