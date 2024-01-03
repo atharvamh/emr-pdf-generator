@@ -17,8 +17,10 @@ html, body{
   background-color: darkgray;
   margin: auto;
   height: 100%;
+  position: fixed; /* added to prevent address bar hiding in mobile browsers */
   font-family: 'Rubik', Arial, Helvetica, sans-serif;
 }
+
 
 #root{
   height: 100%;
