@@ -218,9 +218,9 @@ const App = () => {
   }
 
   return (
-    <div className='w-full flex flex-1 h-screen'>
+    <div className='w-full flex flex-col flex-1 h-screen'>
       <Toaster />
-      <div className="p-6 bg-gray-800 text-white w-full h-screen overflow-y-auto mb-16">
+      <div className="p-6 bg-gray-800 text-white w-full h-screen overflow-y-auto">
         <Tab.Group>
           <Tab.List className="flex flex-1 w-full px-2 gap-2">
             <Tab className={({ selected }) =>
@@ -469,7 +469,7 @@ const App = () => {
                       )}
                     </Disclosure>
 
-                    <div className='mt-4 mb-12'>
+                    <div className='my-4'>
                       <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
                         Generate Report
                       </button>
@@ -512,7 +512,7 @@ const App = () => {
           </Tab.Panels>
         </Tab.Group>
       </div>
-      <footer className='w-full absolute bottom-0 right-0 text-center p-2 bg-gray-800 text-white'>
+      <footer className='w-full bottom-0 right-0 text-center p-2 bg-gray-800 text-white'>
         <p className='text-sm'>&copy; { new Date().getFullYear() }. MediGen Solutions. All Rights Reserved.</p>
         <p className='text-xs'>Version - {packageJson.version}</p>
       </footer>
