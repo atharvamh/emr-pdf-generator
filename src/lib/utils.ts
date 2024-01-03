@@ -245,9 +245,10 @@ class PdfGenerator{
   }
 
   outputToTab = (patientDetails: IPatientInformation) => {
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getDate().toString().padStart(2,'0')}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
-    const fileName = `${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report_${formattedDate}.pdf`;
+    console.log(patientDetails);
+    // const currentDate = new Date();
+    // const formattedDate = `${currentDate.getDate().toString().padStart(2,'0')}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+    //const fileName = `${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report_${formattedDate}.pdf`;
     window.open(this._pdfContext.output("bloburl"));
   }
 }
