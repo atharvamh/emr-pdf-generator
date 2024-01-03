@@ -6,6 +6,7 @@ import GeneralInput from './general-input';
 import { IChamberReadings, IDopplerFindings, IImpressionTemplate, IOtherEchoFindings, IPatientInformation } from './interfaces/app-interfaces';
 import toast, { Toaster } from 'react-hot-toast';
 import { getLocalStorageUsage } from './lib/storageUtils';
+import packageJson from "../package.json";
 
 const App = () => {
   const genderOptions = [
@@ -510,6 +511,10 @@ const App = () => {
               </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
+        <footer className='w-full absolute bottom-0 right-0 text-center p-4'>
+          <p className='text-sm'>&copy; { new Date().getFullYear() }. MediGen Solutions. All Rights Reserved.</p>
+          <p className='text-xs p-1'>Version - {packageJson.version}</p>
+        </footer>
       </div>
     </div>
   );
