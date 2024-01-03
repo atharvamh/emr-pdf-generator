@@ -244,12 +244,17 @@ class PdfGenerator{
     this._pdfContext.save(`${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report_${formattedDate}.pdf`);
   }
 
-  outputToTab = (patientDetails: IPatientInformation) => {
-    console.log(patientDetails);
-    // const currentDate = new Date();
-    // const formattedDate = `${currentDate.getDate().toString().padStart(2,'0')}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
-    //const fileName = `${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report_${formattedDate}.pdf`;
-    window.open(this._pdfContext.output("bloburl"));
+  downloadInMobile = (patientDetails: IPatientInformation) => {
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getDate().toString().padStart(2,'0')}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+    const blobUrl = URL.createObjectURL(this._pdfContext.output("blob"));
+    const downloadLink = document.createElement('a');
+    downloadLink.download = `${patientDetails.name ? patientDetails.name : "Patient"}_Echo_Report_${formattedDate}.pdf`;
+    downloadLink.href = blobUrl;
+
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   }
 }
 
@@ -293,7 +298,7 @@ export const generatePdf = (patientDetails: IPatientInformation, chamberReadings
   pdfgen.setDoctorSignature(doctorDetails.doctorName, doctorDetails.qualification);
 
   if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())) {
-    pdfgen.outputToTab(patientDetails);
+    pdfgen.downloadInMobile(patientDetails);
   } else {
     pdfgen.savePdf(patientDetails);
   }
