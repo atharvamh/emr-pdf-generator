@@ -220,7 +220,7 @@ const App = () => {
   return (
     <div className='w-full flex flex-1 h-screen'>
       <Toaster />
-      <div className="p-6 bg-gray-800 text-white w-full h-screen overflow-y-auto mb-8">
+      <div className="p-6 bg-gray-800 text-white w-full h-screen overflow-y-auto mb-16">
         <Tab.Group>
           <Tab.List className="flex flex-1 w-full px-2 gap-2">
             <Tab className={({ selected }) =>
@@ -511,11 +511,11 @@ const App = () => {
               </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
-        <footer className='w-full absolute bottom-0 right-0 text-center p-2 bg-gray-800'>
-          <p className='text-sm'>&copy; { new Date().getFullYear() }. MediGen Solutions. All Rights Reserved.</p>
-          <p className='text-xs'>Version - {packageJson.version}</p>
-        </footer>
       </div>
+      <footer className='w-full absolute bottom-0 right-0 text-center p-2 bg-gray-800 text-white'>
+        <p className='text-sm'>&copy; { new Date().getFullYear() }. MediGen Solutions. All Rights Reserved.</p>
+        <p className='text-xs'>Version - {packageJson.version}</p>
+      </footer>
     </div>
   );
 };
